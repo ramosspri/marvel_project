@@ -149,7 +149,7 @@ _Aqui voce aprende a instalar e configurar seu aplicativo_
 2. Clone o repositório
 
    ```sh
-   git clone https://github.com/ramosspri/marvel_project
+   git clone git@github.com:ramosspri/marvel_project.git
    ```
 
 3. Instale as dependencias do projeto
