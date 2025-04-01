@@ -68,6 +68,8 @@ class CharactersCubit extends Cubit<CharactersState> {
   }
 
   Future<void> getCharacters(CharacterRequestEntity requestEntity) async {
+    emit(Loading());
+
     final List<CharacterEntity> response =
         await _charactersGetListUsecase.call(requestEntity);
 
