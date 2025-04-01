@@ -65,55 +65,58 @@ class _CarouselTimerWidgetState extends State<CarouselTimerWidget> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final double screenHeight = MediaQuery.of(context).size.height;
-    final double availableHeight =
-        screenHeight - MediaQuery.of(context).padding.top;
-    final double carouselHeight = availableHeight * 0.42;
+  Widget build(BuildContext context) => Column(children: <Widget>[
+        SizedBox(
+            height: 180,
+            child: PageView.builder(
+                controller: _pageController,
+                itemCount: widget.cards.length,
+                onPageChanged: (index) {
+                  setState(() {
+                    _currentIndex = index;
+                    _progress = 0;
+                  });
+                },
+                itemBuilder: (context, index) {
+                  double scaleFactor = _currentIndex == index ? 1.1 : 0.9;
 
-    return SizedBox(
-        height: carouselHeight.clamp(250, availableHeight * 0.5),
-        child: Column(children: <Widget>[
-          Expanded(
-              child: PageView.builder(
-                  controller: _pageController,
-                  itemCount: widget.cards.length,
-                  onPageChanged: (int index) {
-                    setState(() {
-                      _currentIndex = index;
-                      _startTimer();
-                    });
-                  },
-                  itemBuilder: (BuildContext context, int index) =>
-                      SingleChildScrollView(child: widget.cards[index]))),
-          Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-            Container(
-                height: 32,
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                decoration: BoxDecoration(
-                    color: const Color(0xFFDDDDDD),
-                    borderRadius: BorderRadius.circular(100)),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      IconButton(
-                          icon: Icon(_isPaused ? Icons.play_arrow : Icons.pause,
-                              size: 16, color: const Color(0xFF000000)),
-                          onPressed: _togglePause,
-                          color: const Color(0xFF000000)),
-                      Row(
-                          children: List<Widget>.generate(
-                              widget.cards.length,
-                              (int index) => Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 4),
-                                  child: index == _currentIndex
-                                      ? _buildProgressIndicator()
-                                      : _buildInactiveDot())))
-                    ]))
-          ])
-        ]));
-  }
+                  return TweenAnimationBuilder<double>(
+                      duration: const Duration(milliseconds: 300),
+                      tween: Tween(begin: 0.9, end: scaleFactor),
+                      builder: (context, scale, child) =>
+                          Transform.scale(scale: scale, child: child),
+                      child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 8),
+                          child: widget.cards[index]));
+                })),
+        const SizedBox(height: 16),
+        Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+          Container(
+              height: 32,
+              decoration: BoxDecoration(
+                  color: const Color(0xFFDDDDDD),
+                  borderRadius: BorderRadius.circular(100)),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    IconButton(
+                        icon: Icon(_isPaused ? Icons.play_arrow : Icons.pause,
+                            size: 16, color: const Color(0xFF000000)),
+                        onPressed: _togglePause,
+                        color: const Color(0xFF000000)),
+                    Row(
+                        children: List<Widget>.generate(
+                            widget.cards.length,
+                            (int index) => Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 4),
+                                child: index == _currentIndex
+                                    ? _buildProgressIndicator()
+                                    : _buildInactiveDot())))
+                  ]))
+        ])
+      ]);
 
   Widget _buildInactiveDot() => Container(
       width: 6,

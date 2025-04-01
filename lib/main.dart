@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-import 'core/injection/core_dependency_injection.dart';
-import 'features/characters/presentation/characters.page.dart';
+import 'features/characters/presentation/pages/characters_page.dart';
+import 'features/characters/presentation/cubit/characters_cubit.dart';
 
 void main() async {
-  await dotenv.load(
-      fileName: '/Users/priscila.oliveira/Projetos/marvel_project/.env');
-
-  await CoreDependencyInjection.instance.initialize();
+  await dotenv.load();
 
   runApp(const MyApp());
 }
@@ -18,5 +16,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MaterialApp(
-      theme: ThemeData(useMaterial3: true), home: const CharactersPage());
+      theme: ThemeData(useMaterial3: true),
+      home: BlocProvider<CharactersCubit>(
+          create: (_) => CharactersCubit(), child: const CharactersPage()));
 }
