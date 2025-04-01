@@ -1,30 +1,20 @@
-import 'dart:convert';
-import 'package:crypto/crypto.dart';
-import 'package:http/http.dart' as http;
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:dio/dio.dart';
+import 'package:retrofit/retrofit.dart';
 
-class CharactersDatasourceRemote {
-  final String baseUrl = 'https://gateway.marvel.com/v1/public/characters';
-  final String publicKey = dotenv.env['MARVEL_PUBLIC_KEY'] ?? '';
-  final String privateKey = dotenv.env['MARVEL_PRIVATE_KEY'] ?? '';
+import '../model/character_response_wrapper_model.dart';
 
-  String _generateHash(String timestamp) {
-    var input = timestamp + privateKey + publicKey;
-    return md5.convert(utf8.encode(input)).toString();
-  }
+part 'characters_datasource_remote.g.dart';
 
-  Future<List<dynamic>> getCharacters() async {
-    final timestamp = DateTime.now().millisecondsSinceEpoch.toString();
-    final hash = _generateHash(timestamp);
-    final url = '$baseUrl?ts=$timestamp&apikey=$publicKey&hash=$hash';
+@RestApi(baseUrl: 'https://gateway.marvel.com')
+abstract class CharactersDatasourceRemote {
+  factory CharactersDatasourceRemote(Dio dio, {String baseUrl}) =
+      _CharactersDatasourceRemote;
 
-    final response = await http.get(Uri.parse(url));
-
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      return data['data']['results'];
-    } else {
-      throw Exception('Erro ao buscar personagens');
-    }
-  }
+  @GET('/v1/public/characters')
+  Future<CharacterResponseWrapper> getCharacters(
+      @Query('ts') String timestamp,
+      @Query('apikey') String apiKey,
+      @Query('hash') String hash,
+      @Query('limit') int limit,
+      @Query('offset') int offset);
 }
