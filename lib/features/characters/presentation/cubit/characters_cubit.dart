@@ -24,7 +24,6 @@ class CharactersCubit extends Cubit<CharactersState> {
   List<CharacterEntity> _filteredCharacters = <CharacterEntity>[];
 
   void init() {
-    debugPrint('Cubit initialized');
     final timestamp = DateTime.now().millisecondsSinceEpoch.toString();
     final apiKey = dotenv.env['MARVEL_PUBLIC_KEY'] ?? '';
     final privateKey = dotenv.env['MARVEL_PRIVATE_KEY'] ?? '';
@@ -39,9 +38,7 @@ class CharactersCubit extends Cubit<CharactersState> {
   }
 
   Future<void> loadMoreCharacters() async {
-    if (state is LoadMoreCharacters) return;
-
-    emit(LoadMoreCharacters());
+    emit(Loading());
 
     final timestamp = DateTime.now().millisecondsSinceEpoch.toString();
     final apiKey = dotenv.env['MARVEL_PUBLIC_KEY'] ?? '';
@@ -71,8 +68,6 @@ class CharactersCubit extends Cubit<CharactersState> {
   }
 
   Future<void> getCharacters(CharacterRequestEntity requestEntity) async {
-    debugPrint('Estado emitido: CharactersLoading');
-
     final List<CharacterEntity> response =
         await _charactersGetListUsecase.call(requestEntity);
 

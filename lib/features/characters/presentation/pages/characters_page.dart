@@ -47,8 +47,7 @@ class _CharactersPageState extends State<CharactersPage> {
                 SingleChildScrollView(
                     controller: _scrollController,
                     child: const CharactersMainContentWidget()),
-                if (state is LoadMoreCharacters)
-                  const Center(
-                      child: CircularProgressIndicator(color: Colors.pink))
+                if (state is Loading)
+                  const Center(child: CircularProgressIndicator())
               ])));
 }

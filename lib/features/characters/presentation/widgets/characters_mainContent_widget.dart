@@ -33,9 +33,6 @@ class _CharactersMainContentWidgetState
         padding: EdgeInsets.symmetric(horizontal: size24px, vertical: size24px),
         child: BlocBuilder<CharactersCubit, CharactersState>(
             builder: (context, state) {
-          if (state is Loading) {
-            return const Center(child: CircularProgressIndicator());
-          }
           if (state is ErrorGetCharacters) {
             return Center(child: Text(state.message));
           }
