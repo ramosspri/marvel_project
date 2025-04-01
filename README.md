@@ -31,7 +31,7 @@
   <p align="center">
     Repositório responsável por gerenciar o código do projeto, em Flutter, utilizando a API da Marvel
     <br />
-    <a href="https://www.notion.so/priscilaramos/Marvel-Project-11c55cb9c70880e2a186c8b3700d2e00?pvs=4"><strong>Documentação</strong></a>
+    <a href="https://priscilaramos.notion.site/Marvel-Project-11c55cb9c70880e2a186c8b3700d2e00"><strong>Documentação</strong></a>
 </div>
 <br/>
 
